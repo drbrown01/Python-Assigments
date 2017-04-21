@@ -9,21 +9,18 @@ class UserManager(models.Manager):
         is_valid = True
         errors = []
         if len(post.get('name')) == 0:
-		    is_valid = False
-            errors.append('Name field cannot be blank')
-        if not re.search(r'\w+\@\W+\.\W+', post.GET('email')):
             is_valid = False
-            errors.append("You must provide a valid email address")
+            errors.append('Name field cannot be blank')
+	    if not re.search(r'\w+\@\w+\.\w+', post.get('email')):
+                is_valid = False
+                errors.append('You must provide a valid email address')
         if len(post.get('password')) == 0:
             is_valid = False
             errors.append('Password cannot be blank')
-        if post.get ('password') != post.GET('password_confirmation'):
+	if post.get('password') != post.get('password_confirmation'):
             is_valid = False
-            errors.append('Your Passwords do not match')
-            return(is_valid, errors)
-
-
-
+            errors.append('Your passwords do not match')
+	return (is_valid, errors)
 
 class User(models.Model):
     name = models.CharField(max_length=255)

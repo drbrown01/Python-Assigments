@@ -8,6 +8,24 @@ import bcrypt
 def index (request):
     return render(request, 'main/index.html')
 
+def login(reaquest):
+    if request.method != "POST":
+        return redirect  ('/')
+    else:
+        if request.POST.get('email') == '' or request.POST.get('password') == '':
+            messages.error(request, 'Invalid credientials or GTFO!')
+            return redirect('/')
+    #see if email is in db?
+        user = User.objects.filter(email=request.POST.get(email)).first()
+
+    if user and bcrypt.checkpw(request.POST.get('password').encode , user.password.encode()) :
+        request.session['user_id'] = user_id
+        return redirect('/success')
+    else:
+        messages.error('GTFO')
+        return redirect ('/')
+    # if so verify password
+
 def createUser(request):
     if request.method != 'POST':
         return redirect('/')
@@ -18,7 +36,7 @@ def createUser(request):
                 messages.error(request, error)
             return redirect('/')
         else:
-             hashed_pw = bcyrpt.hashpw(request.POST.get('password').encode(), bcrypt.gensalt())
+             hashed_pw = bcrypt.hashpw(request.POST.get('password').encode(), bcrypt.gensalt())
              user = User.objects.create(
                  name= request.POST.get('name'),
                  email = request.POST.get('email'),
@@ -26,3 +44,5 @@ def createUser(request):
                  )
              request.session['user_id'] = user.id
              return redirect('/success')
+def success(request):
+    return render (request, 'success.html')
