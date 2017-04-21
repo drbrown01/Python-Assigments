@@ -40,6 +40,14 @@ class User(models.Model):
 class Post(models.Model):
     post = models.CharField(max_length=255)
     user = models.ForeignKey(User, related_name='posts')
-    likes = models.ManyToManyField(User)
+    likes = models.ManyToManyField(User, related_name='posts_liked')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Comments(models.Model):
+    comment = models.TextField()
+    post = models.ForeignKey(Post, related_name="comments")
+    user = models.ForeignKey(User, related_name='comments')
+    likes = models.ManyToManyField(User, related_name="comments_liked")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
