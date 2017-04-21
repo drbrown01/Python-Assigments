@@ -21,6 +21,13 @@ class UserManager(models.Manager):
             is_valid = False
             errors.append('Your passwords do not match')
 	return (is_valid, errors)
+    def loginUser(self, post):
+        user = User.objects.filter(email=post.get(email)).first()
+        if user and bcrypt.checkpw(request.POST.get('password').encode , user.password.encode()) :
+            return{ 'status': True, 'user': user }
+        else:
+            return {'status':False, 'message': 'invalid credientialz ' }
+# if so verify password
 
 class User(models.Model):
     name = models.CharField(max_length=255)
@@ -29,3 +36,10 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()
+
+class Post(models.Model):
+    post = models.CharField(max_length=255)
+    user = models.ForeignKey(User, related_name='posts')
+    likes = models.ManyToManyField(User)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

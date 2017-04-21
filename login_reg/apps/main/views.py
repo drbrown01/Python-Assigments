@@ -8,7 +8,7 @@ import bcrypt
 def index (request):
     return render(request, 'main/index.html')
 
-def login(reaquest):
+def login(request):
     if request.method != "POST":
         return redirect  ('/')
     else:
@@ -16,15 +16,13 @@ def login(reaquest):
             messages.error(request, 'Invalid credientials or GTFO!')
             return redirect('/')
     #see if email is in db?
-        user = User.objects.filter(email=request.POST.get(email)).first()
-
-    if user and bcrypt.checkpw(request.POST.get('password').encode , user.password.encode()) :
-        request.session['user_id'] = user_id
-        return redirect('/success')
-    else:
-        messages.error('GTFO')
-        return redirect ('/')
-    # if so verify password
+        check = User.objects.loginUser(request.POST)
+        if check['status']  == False:
+            messages.error(request, check[message])
+            return redirect('/')
+        else:
+            request.session['user_id'] = check ['user'].id
+            return redirect('/success')
 
 def createUser(request):
     if request.method != 'POST':
