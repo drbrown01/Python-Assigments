@@ -43,4 +43,4 @@ def createUser(request):
              request.session['user_id'] = user.id
              return redirect('/success')
 def success(request):
-    return render (request, 'success.html')
+    return render (request, 'main/success.html')
