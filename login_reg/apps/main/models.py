@@ -44,7 +44,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-class Comments(models.Model):
+class Comment(models.Model):
     comment = models.TextField()
     post = models.ForeignKey(Post, related_name="comments")
     user = models.ForeignKey(User, related_name='comments')
