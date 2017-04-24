@@ -43,4 +43,24 @@ def createUser(request):
              request.session['user_id'] = user.id
              return redirect('/success')
 def success(request):
-    return render (request, 'main/success.html')
+    contex = {
+        'post' : Post.objects.all(),
+    }
+    return render (request, 'main/success.html', context)
+
+def createPost(request):
+    if request.method != "POST":
+        return redirect('/')
+    else:
+        # check = check.post.validatePost(request.POST)
+        check = Post.objects.validatePost(request.POST)
+        if check ['status'] == False:
+            for error in check['errors']:
+                messages.error(request,error )
+            else:
+                Post.objects.create(
+                    post = request.POST.get('post'),
+                    user=User.objects.get(id=request.session['user_id'])
+                    # always shows current user
+                )
+                return redirect('/success')

@@ -6,8 +6,25 @@
   </head>
   <body>
     <div class="container">
-      
+      <form class="" action="/posts" method="post">
+        {%  csrf_token %}
+        <div class="">
+          <label for="">Create a post </label>
+        </div>
+        <div class="">
+          <textarea name="post" rows="8" cols="80"></textarea>
+        </div>
+        <input type="submit" name="" value="Create Post">
 
+
+
+
+      </form>
+      {% for post in posts %}
+
+      {% endfor %}
+      <h3>{{post.post}}</h3>
+      <p>{{ post.user.name }}</p>
     </div>
 
   </body>
