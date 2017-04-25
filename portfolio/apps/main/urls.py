@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^index$', views.index),
     url(r'^testimonials$', views.testimonials),
     url(r'^test$', views.test),
+    url(r'^new_user', views.create),
 ]
